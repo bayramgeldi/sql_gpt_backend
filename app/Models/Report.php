@@ -11,4 +11,17 @@ class Report extends Model
         'query',
         'database_id',
     ];
+
+
+    public function database(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Database::class);
+    }
+
+    public function team()
+    {
+        return $this->hasOneThrough(Team::class, Database::class, 'id', 'id', 'database_id', 'team_id');
+    }
+
+
 }

@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ReportResource\Pages;
 use App\Models\Report;
 use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -29,9 +30,9 @@ class ReportResource extends Resource
                 TextInput::make('query')
                     ->required(),
 
-                TextInput::make('database_id')
-                    ->required()
-                    ->integer(),
+                Select::make('database.host')
+                    ->relationship('database', 'host')
+                    ->required(),
 
                 Placeholder::make('created_at')
                     ->label('Created Date')
@@ -49,9 +50,9 @@ class ReportResource extends Resource
             ->columns([
                 TextColumn::make('prompt'),
 
-                TextColumn::make('query'),
+                TextColumn::make('query')->badge()->copyable(),
 
-                TextColumn::make('database_id'),
+                TextColumn::make('database.host'),
             ]);
     }
 
