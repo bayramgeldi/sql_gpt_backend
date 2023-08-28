@@ -16,7 +16,7 @@ class ChatGPT
             "messages" => [
                 [
                     "role" => "system",
-                    "content" => "Given the following SQL tables, your job is to write queries given a user’s request. You must only return with SQL query. \n\n$databaseSchema\n);"
+                    "content" => "Given the following MySQL tables, your job is to write queries given a user’s request. You must only return with SQL query. \n\n$databaseSchema\n);"
                 ],
                 [
                     "role" => "user",

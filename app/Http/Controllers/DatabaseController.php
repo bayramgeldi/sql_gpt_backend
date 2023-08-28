@@ -64,7 +64,6 @@ class DatabaseController extends Controller
 
         //TODO: move this to somewhere else, it should not try to fetch the tables and columns every time
         $tables = DB::connection('secondary_mysql')->select("SELECT TABLE_NAME as 'table_name'FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = '$database->name'");
-
         foreach ($tables as $element) {
             $table = Table::firstOrCreate(
                 [
@@ -111,6 +110,13 @@ class DatabaseController extends Controller
             'prompt' => 'required|string',
         ]);
 
+        //TODO: move this to a middleware
+        Config::set('database.connections.secondary_mysql.host', $database->host);
+        Config::set('database.connections.secondary_mysql.port', $database->port);
+        Config::set('database.connections.secondary_mysql.username', $database->username);
+        Config::set('database.connections.secondary_mysql.password', $database->password);
+        Config::set('database.connections.secondary_mysql.database', $database->name);
+
         //database schema
         $databaseSchema = "";
         foreach ($database->tables as $table) {
@@ -120,6 +126,7 @@ class DatabaseController extends Controller
             }
             $databaseSchema .= ");\n";
         }
+
 
         $response = ChatGPT::ask($databaseSchema, $validated['prompt']);
 
