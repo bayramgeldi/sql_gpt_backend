@@ -1,7 +1,5 @@
 <?php
 
-use App\Http\Controllers\DashBoardController;
-use App\Http\Controllers\DatabaseController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -31,11 +29,7 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/dashboard', [DashBoardController::class,'dashboard'])->name('dashboard');
-
-    Route::post('/database/test-connection', [DatabaseController::class,'testConnection'])->name('database.test-connection');
-    Route::post('/database/store', [DatabaseController::class,'store'])->name('database.store');
-    Route::get('/database/{database}', [DatabaseController::class,'show'])->name('database.show');
-    Route::post('/database/{database}/ask-to-gpt', [DatabaseController::class,'askToGPT'])->name('database.ask-to-gpt');
-    Route::post('/database/{database}/save-query', [DatabaseController::class,'saveToReport'])->name('database.save-query');
+    Route::get('/dashboard', function () {
+        return Inertia::render('Dashboard');
+    })->name('dashboard');
 });

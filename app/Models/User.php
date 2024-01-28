@@ -2,21 +2,16 @@
 
 namespace App\Models;
 
-use Filament\Models\Contracts\FilamentUser;
-use Filament\Models\Contracts\HasTenants;
-use Filament\Panel;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Collection;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Jetstream\HasTeams;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable implements MustVerifyEmail, FilamentUser, HasTenants
+class User extends Authenticatable
 {
     use HasApiTokens;
     use HasFactory;
@@ -63,19 +58,4 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser, Has
     protected $appends = [
         'profile_photo_url',
     ];
-
-    public function canAccessPanel(Panel $panel): bool
-    {
-        return Team::where('user_id',$this->id)->exists() && $this->hasVerifiedEmail();
-    }
-
-    public function canAccessTenant(Model $tenant): bool
-    {
-        return $this->teams->contains($tenant) || $this->ownsTeam($tenant);
-    }
-
-    public function getTenants(Panel $panel): array|Collection
-    {
-        return $this->teams;
-    }
 }
